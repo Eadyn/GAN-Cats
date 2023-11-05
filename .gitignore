@@ -1,3 +1,6 @@
 *.jpg
 *.venv
 Data
+.python
+.kaggle
+OriginalData
