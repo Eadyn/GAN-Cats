@@ -1,6 +1,5 @@
-import os 
-import PIL
 from PIL import Image
+import os
 
 newIndex = 0
 for i in os.listdir("./Data"):
@@ -17,3 +16,4 @@ for i in os.listdir("./Data"):
 
     os.rename("./Data/" + i,f"./Data/CAT-{str(newIndex)}.jpg")
     newIndex += 1
+
