@@ -1,29 +1,48 @@
 #! /bin/bash
-
+set -e
 RED="\033[0;31m"
 CYAN="\033[0;36m"
 NC="\033[0m"
 
-echo -e "$CYAN Creating Python Virtual Enviroment... \033[0m $NC" 
-python3 -m venv ./.python
+echo "In order to Download the Datasets, you must have a Kaggle API key."
+echo "This script cam assume you have put the kaggle.json file in your Downloads \
+ folder and automatically copys it to the correct directoty, \
+ setting the correct permissions" 
 
-echo -e "$CYAN Installing Dependencies... $NC" 
-.python/bin/pip install -r requirements.txt
+printf "import kaggle.json from Downloads?:"
+read VAR1
 
-echo -e  "$CYAN Installing API key from Downloads Folder $NC"
-cp ~/Downloads/kaggle.json ~/.kaggle/kaggle.json
-chmod 600 ~/.kaggle/kaggle.json
+VAR2="yes"
+if [ "$VAR1" = "$VAR2" ]; then
+    echo -e  "$CYAN Installing API key from Downloads Folder $NC"
+    cp ~/Downloads/kaggle.json ~/.kaggle/kaggle.json
+    chmod 600 ~/.kaggle/kaggle.json
+fi
+
+
+echo "(Re)install Python venv?:"
+read VAR1
+VAR2="yes"
+if [ "$VAR1" = "$VAR2" ]; then
+    echo -e "$CYAN Creating Python Virtual Enviroment... \033[0m $NC" 
+    rm -r .python
+    python3 -m venv ./.python
+
+    echo -e "$CYAN Installing Dependencies... $NC" 
+    .python/bin/pip install -r requirements.txt
+fi
 
 # Make working Directories
+rm -r Data
+rm -r OriginalData
 mkdir -p OriginalData/set1
 mkdir -p OriginalData/set2
 mkdir -p Data
-
 # Download Datasets
 
-# kaggle datasets download shaunthesheep/microsoft-catsvsdogs-dataset
+.python/bin/kaggle datasets download shaunthesheep/microsoft-catsvsdogs-dataset
 mv microsoft-catsvsdogs-dataset.zip OriginalData/
-# kaggle datasets download crawford/cat-dataset
+.python/bin/kaggle datasets download crawford/cat-dataset
 mv cat-dataset.zip OriginalData/
 
 # Unzip Datasets
